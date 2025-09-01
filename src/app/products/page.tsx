@@ -3,21 +3,19 @@ import Link from "next/link";
 import React from "react";
 
 type Props = {
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const endPoint = "https://dummyjson.com/products";
 
-const Page = async (props: Props) => {
-  const searchParams = await props.searchParams;
-
+const Page = async ({ searchParams }: Props) => {
   const limit = (searchParams.limit as string) || "10";
   const skip = (searchParams.skip as string) || "0";
 
   const params = new URLSearchParams({ limit, skip });
 
   const response = await fetch(`${endPoint}?${params.toString()}`, {
-    cache: "no-store", // penting supaya fetch ulang tiap request
+    cache: "no-store",
   }).then((res) => res.json());
 
   const products: TProduct[] = response?.products || [];
