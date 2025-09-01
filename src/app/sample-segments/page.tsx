@@ -1,8 +1,10 @@
 import React from "react";
 
+export const dynamic = "force-dynamic"; // ⬅️ ini bikin halaman tidak diprerender
+
 type Props = { params: { segments?: string[] } };
 
-const Page = async ({ params }: Props) => {
+const Page = ({ params }: Props) => {
   const segments = params.segments || [];
 
   return (
