@@ -8,36 +8,37 @@ type Props = {
 
 const endPoint = "https://dummyjson.com/products";
 
-const Page = async (props: Props) => {
+const page = async (props: Props) => {
   const searchParams = await props.searchParams;
 
-  const limit = (searchParams.limit as string) || "10";
-  const skip = (searchParams.skip as string) || "0";
+  const limit = searchParams.limit as string;
+  const skip = searchParams.skip as string;
 
-  const params = new URLSearchParams({ limit, skip });
+  const params = new URLSearchParams({
+    limit: limit,
+    skip: skip,
+  });
 
-  const response = await fetch(`${endPoint}?${params.toString()}`, {
-    cache: "no-store", // biar selalu ambil data terbaru
-  }).then((res) => res.json());
+  const response = await fetch(`${endPoint}?${params.toString()}`).then(
+    async (response) => {
+      const data = await response.json();
+      return data;
+    }
+  );
 
-  // Pastikan products array
-  const products: TProduct[] = response?.products || [];
+  const products: TProduct[] = response.products;
 
   return (
     <div>
-      {products.length > 0 ? (
-        products.map((product) => (
-          <div key={product.id}>
-            <p className="text-2xl">{product.title}</p>
-            <p className="text-base">{product.description}</p>
-            <Link href={`/products/${product.id}`}>Goto {product.title}</Link>
-          </div>
-        ))
-      ) : (
-        <p className="text-gray-500">No products found.</p>
-      )}
+      {products.map((product) => (
+        <div key={product.id}>
+          <p className="text-2xl">{product.title}</p>
+          <p className="text-base">{product.description}</p>
+          <Link href={`/products/${product.id}`}>Goto {product.title}</Link>
+        </div>
+      ))}
     </div>
   );
 };
 
-export default Page;
+export default page;
