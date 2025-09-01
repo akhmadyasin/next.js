@@ -8,37 +8,35 @@ type Props = {
 
 const endPoint = "https://dummyjson.com/products";
 
-const page = async (props: Props) => {
+const Page = async (props: Props) => {
   const searchParams = await props.searchParams;
 
-  const limit = searchParams.limit as string;
-  const skip = searchParams.skip as string;
+  const limit = (searchParams.limit as string) || "10";
+  const skip = (searchParams.skip as string) || "0";
 
-  const params = new URLSearchParams({
-    limit: limit,
-    skip: skip,
-  });
+  const params = new URLSearchParams({ limit, skip });
 
-  const response = await fetch(`${endPoint}?${params.toString()}`).then(
-    async (response) => {
-      const data = await response.json();
-      return data;
-    }
-  );
+  const response = await fetch(`${endPoint}?${params.toString()}`, {
+    cache: "no-store", // penting supaya fetch ulang tiap request
+  }).then((res) => res.json());
 
-  const products: TProduct[] = response.products;
+  const products: TProduct[] = response?.products || [];
 
   return (
     <div>
-      {products.map((product) => (
-        <div key={product.id}>
-          <p className="text-2xl">{product.title}</p>
-          <p className="text-base">{product.description}</p>
-          <Link href={`/products/${product.id}`}>Goto {product.title}</Link>
-        </div>
-      ))}
+      {products.length > 0 ? (
+        products.map((product) => (
+          <div key={product.id}>
+            <p className="text-2xl">{product.title}</p>
+            <p className="text-base">{product.description}</p>
+            <Link href={`/products/${product.id}`}>Goto {product.title}</Link>
+          </div>
+        ))
+      ) : (
+        <p>No products found.</p>
+      )}
     </div>
   );
 };
 
-export default page;
+export default Page;
