@@ -1,11 +1,12 @@
 import React from "react";
 
-export const dynamic = "force-dynamic"; // ⬅️ ini bikin halaman tidak diprerender
+// ⬅️ Ini bikin halaman tidak di-prerender (SSR)
+export const dynamic = "force-dynamic";
 
 type Props = { params: { segments?: string[] } };
 
 const Page = ({ params }: Props) => {
-  const segments = params.segments || [];
+  const segments = params?.segments || []; // ⬅️ default array kosong
 
   return (
     <main>
