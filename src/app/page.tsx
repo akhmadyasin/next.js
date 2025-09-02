@@ -5,7 +5,7 @@ export default function Home() {
     { href: "/calculator", label: "Calculator" },
     { href: "/tugas2-form", label: "User Form" },
     { href: "/api/products", label: "Get Products" },
-    { href: "/api/products/me", label: "Detail Products" },
+    { href: "/api/products/1", label: "Detail Products" },
   ];
 
   return (
